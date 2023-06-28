@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  oserou_q:
+    build: 
+      context: ..
+      dockerfile: ./oserou_q/Dockerfile
+    tty: true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/workspace

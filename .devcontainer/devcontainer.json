@@ -1,0 +1,13 @@
+{
+	"name": "oserou_q",
+	// Dockerfileでイメージ・コンテナを作成
+	//"dockerFile": "Dockerfile",
+	"service": "oserou_q",
+	"dockerComposeFile": ["../docker-compose.yml"], 
+	// リモート先のVS Codeにインストールする拡張機能
+	"workspaceFolder": "/workspace"
+	//"extensions": [
+	//	"ms-python.python"
+	//]
+	//"shutdownAction": "stopCompose"
+}
