@@ -8,59 +8,59 @@ import time
 from modules import placestone, calcscore, calcresult, findinvalidinput, mytkinter
 from modules import constant as const
 
-def osero_initialize(ban):
+def osero_initialize(board):
     #0 = blank
     #1 = black
     #2 = white
-    ban[const.SIZE //2 - 1][const.SIZE // 2 - 1] = 2
-    ban[const.SIZE //2    ][const.SIZE // 2    ] = 2
-    ban[const.SIZE //2 - 1][const.SIZE // 2    ] = 1
-    ban[const.SIZE //2    ][const.SIZE // 2 - 1] = 1
-    return ban
+    board[const.SIZE //2 - 1][const.SIZE // 2 - 1] = 2
+    board[const.SIZE //2    ][const.SIZE // 2    ] = 2
+    board[const.SIZE //2 - 1][const.SIZE // 2    ] = 1
+    board[const.SIZE //2    ][const.SIZE // 2 - 1] = 1
+    return board
 
-def score_2dvec(ban):
+def score_2dvec(board):
     score = [[0 for i in range(const.SIZE)] for j in range(const.SIZE)]
-    for gyou in range(const.SIZE):
-        for retsu in range(const.SIZE):
-            if ban[gyou][retsu] == 1 or ban[gyou][retsu] == 2:
-                score[gyou][retsu] -= 200000
+    for row in range(const.SIZE):
+        for collumn in range(const.SIZE):
+            if board[row][collumn] == 1 or board[row][collumn] == 2:
+                score[row][collumn] -= 200000
             else:
                 continue
 
-    for gyou in range(const.SIZE):
-        for retsu in range(const.SIZE):
-            if calcscore.score_count(ban, gyou, retsu, 2) > 0:
-                score[gyou][retsu] += calcscore.score_count(ban, gyou, retsu, 2)
+    for row in range(const.SIZE):
+        for collumn in range(const.SIZE):
+            if calcscore.score_count(board, row, collumn, 2) > 0:
+                score[row][collumn] += calcscore.score_count(board, row, collumn, 2)
             else:
-                score[gyou][retsu] -= 200000
+                score[row][collumn] -= 200000
 
     global turns
-    for gyou in range(const.SIZE):
-        for retsu in range(const.SIZE):
-            score[gyou][retsu] += abs(int(random.gauss(0, 10))) // int(pow((turns+1), 0.5))
+    for row in range(const.SIZE):
+        for collumn in range(const.SIZE):
+            score[row][collumn] += abs(int(random.gauss(0, 10))) // int(pow((turns+1), 0.5))
 
     return score
 
-def cpu_placestone(ban):
+def cpu_placestone(board):
     global owaru1
     global owaru2
     bestscorex = -1
     bestscorey = -1
     bestscore = -1
-    #score = score_calc2(ban)
-    #score = score_learning(ban, const.WHITE)
-    score = score_2dvec(ban)
+    #score = score_calc2(board)
+    #score = score_learning(board, const.WHITE)
+    score = score_2dvec(board)
 
-    for gyou in range(const.SIZE):
-        for retsu in range(const.SIZE):
-            if bestscore < score[gyou][retsu]:
-                bestscore = score[gyou][retsu]
-                bestscorex = gyou
-                bestscorey = retsu
+    for row in range(const.SIZE):
+        for collumn in range(const.SIZE):
+            if bestscore < score[row][collumn]:
+                bestscore = score[row][collumn]
+                bestscorex = row
+                bestscorey = collumn
     if bestscorex >= 0:
 
         #print("cpu:"," ", bestscorex, ",", bestscorey)
-        ban = placestone.board_placestone(ban, bestscorex, bestscorey, 2)
+        board = placestone.board_placestone(board, bestscorex, bestscorey, 2)
         owaru2 = False
     else:
         print("cpupass")
@@ -68,24 +68,28 @@ def cpu_placestone(ban):
         turns -= 1
         #global owaru2
         owaru2 = True
-    return ban
+    return board
 
-def player_placestone(ban, gyou, retsu):
+def player_placestone(board, row, collumn):
     global owaru1
     global owaru2
-    print(gyou, ",", retsu)
-    if calcscore.score_count(ban, gyou, retsu, 1) < 1 or ban[gyou][retsu] > 0 or gyou >= const.SIZE or retsu >= const.SIZE\
-        or gyou < 0 or retsu < 0:
-        #if ban[gyou][retsu]>0:
-            #print("Yes")
-        print("playerpass")
-        global turns
+    global turns
+    print(row, collumn)
+    if (row >= const.SIZE or collumn >= const.SIZE or row < 0 or collumn < 0):
+        print("playerpass(invalid input:out of space)")
         turns -= 1
         owaru1 = True
     else:
-        ban = placestone.board_placestone(ban, gyou, retsu, 1)
-        owaru1 = False
-    return ban
+        if calcscore.score_count(board, row, collumn, 1) < 1 or board[row][collumn] > 0:
+            #if board[row][collumn]>0:
+                #print("Yes")
+            print("playerpass(invalid input:got no stones)")
+            turns -= 1
+            owaru1 = True
+        else:
+            board = placestone.board_placestone(board, row, collumn, 1)
+            owaru1 = False
+    return board
 
 def main():
     tkgui = mytkinter.Tkgui()
@@ -94,12 +98,12 @@ def main():
     teban = 0
     owaru1 = False
     owaru2 = False
-    ban = [ [0] * const.SIZE for i in range(const.SIZE)]
-    ban = osero_initialize(ban)
-    tkgui.ban_image(ban)
+    board = [ [0] * const.SIZE for i in range(const.SIZE)]
+    board = osero_initialize(board)
+    tkgui.board_image(board)
     a = input("time control:")
 
-    while turns < 60:
+    while turns < const.SIZE**2 - 4:
         error = True
         if owaru1 == False or owaru2 == False:
 
@@ -108,31 +112,31 @@ def main():
                 while error:
                     try:
                         tkgui.wait_click(a)
-                        ban = player_placestone(ban, tkgui.rowinput, tkgui.collumninput)
+                        board = player_placestone(board, tkgui.rowinput, tkgui.collumninput)
                         error = False
                         teban += 1
                         turns += 1
-                        tkgui.ban_image(ban)
+                        tkgui.board_image(board)
 
                     except ValueError:
                         print("error1 0~7 int please")
-                        tkgui.ban_image(ban)
+                        tkgui.board_image(board)
 
             else:
                 time.sleep(3)
-                ban = cpu_placestone(ban)
+                board = cpu_placestone(board)
                 teban += 1
                 turns += 1
-                tkgui.ban_image(ban)
+                tkgui.board_image(board)
         else:
             break
 
-    #ban[gyou][retsu]
+    #board[row][collumn]
     time.sleep(3)
-    print(calcresult.winner(ban))
+    print(calcresult.winner(board))
     teban = 0
 
-    tkgui.ban_image(ban)
+    tkgui.board_image(board)
     return 0
     
 main()

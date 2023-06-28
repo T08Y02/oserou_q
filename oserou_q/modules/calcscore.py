@@ -1,6 +1,6 @@
 from modules import constant as const
 
-def score_count(ban, gyou, retsu, color):
+def score_count(board, gyou, retsu, color):
     if color == const.WHITE:
         before_c = const.BLACK
         after_c = const.WHITE
@@ -26,15 +26,15 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if gyou - i == 0:
-                if ban[gyou-i][retsu] == after_c:
+                if board[gyou-i][retsu] == after_c:
                     break
                 else:
                     ue = 0
                     break
             else:
-                if ban[gyou-i][retsu] == before_c:
+                if board[gyou-i][retsu] == before_c:
                     ue += 1
-                elif ban[gyou-i][retsu] == after_c:
+                elif board[gyou-i][retsu] == after_c:
                 #print(gyou-i)
                     break
                 else:
@@ -49,15 +49,15 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if retsu + i == (const.SIZE - 1):
-                if ban[gyou][retsu + i] == after_c:
+                if board[gyou][retsu + i] == after_c:
                     break
                 else:
                     migi = 0
                     break
             else:
-                if ban[gyou][retsu + i] == before_c:
+                if board[gyou][retsu + i] == before_c:
                     migi += 1
-                elif ban[gyou][retsu + i] == after_c:
+                elif board[gyou][retsu + i] == after_c:
                     break
                 else:
                     migi = 0
@@ -71,15 +71,15 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if gyou + i == (const.SIZE - 1):
-                if ban[gyou+i][retsu] == after_c:
+                if board[gyou+i][retsu] == after_c:
                     break
                 else:
                     sita = 0
                     break
             else:
-                if ban[gyou+i][retsu] == before_c:
+                if board[gyou+i][retsu] == before_c:
                     sita += 1
-                elif ban[gyou + i][retsu] == after_c:
+                elif board[gyou + i][retsu] == after_c:
                     break
                 else:
                     sita = 0
@@ -94,15 +94,15 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if retsu - i == 0:
-                if ban[gyou][retsu - i] == after_c:
+                if board[gyou][retsu - i] == after_c:
                     break
                 else:
                     hidari = 0
                     break
             else:
-                if ban[gyou][retsu-i] == before_c:
+                if board[gyou][retsu-i] == before_c:
                     hidari += 1
-                elif ban[gyou][retsu-i] == after_c:
+                elif board[gyou][retsu-i] == after_c:
                     #print(gyou-i)
                     break
                 else:
@@ -118,21 +118,21 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if retsu + i == (const.SIZE - 1):
-                if ban[gyou - i][retsu + i] == after_c:
+                if board[gyou - i][retsu + i] == after_c:
                     break
                 else:
                     migiue = 0
                     break
             elif gyou - i == 0:
-                if ban[gyou - i][retsu + i] == after_c:
+                if board[gyou - i][retsu + i] == after_c:
                     break
                 else:
                     migiue = 0
                     break
             else:
-                if ban[gyou - i][retsu + i] == before_c:
+                if board[gyou - i][retsu + i] == before_c:
                     migiue += 1
-                elif ban[gyou - i][retsu + i] == after_c:
+                elif board[gyou - i][retsu + i] == after_c:
                     break
                 else:
                     migiue = 0
@@ -147,21 +147,21 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if retsu + i == (const.SIZE - 1):
-                if ban[gyou + i][retsu + i] == after_c:
+                if board[gyou + i][retsu + i] == after_c:
                     break
                 else:
                     migisita = 0
                     break
             elif gyou + i == (const.SIZE - 1):
-                if ban[gyou + i][retsu + i] == after_c:
+                if board[gyou + i][retsu + i] == after_c:
                     break
                 else:
                     migisita = 0
                     break
             else:
-                if ban[gyou + i][retsu + i] == before_c:
+                if board[gyou + i][retsu + i] == before_c:
                     migisita += 1
-                elif ban[gyou + i][retsu + i] == after_c:
+                elif board[gyou + i][retsu + i] == after_c:
                     break
                 else:
                     migisita = 0
@@ -177,21 +177,21 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if retsu - i == 0:
-                if ban[gyou + i][retsu - i] == after_c:
+                if board[gyou + i][retsu - i] == after_c:
                     break
                 else:
                     hidarisita = 0
                     break
             elif gyou + i == (const.SIZE - 1):
-                if ban[gyou + i][retsu - i] == after_c:
+                if board[gyou + i][retsu - i] == after_c:
                     break
                 else:
                     hidarisita = 0
                     break
             else:
-                if ban[gyou + i][retsu - i] == before_c:
+                if board[gyou + i][retsu - i] == before_c:
                     hidarisita += 1
-                elif ban[gyou + i][retsu - i] == after_c:
+                elif board[gyou + i][retsu - i] == after_c:
                     break
                 else:
                     hidarisita = 0
@@ -207,21 +207,21 @@ def score_count(ban, gyou, retsu, color):
                 continue
         else:
             if retsu - i == 0:
-                if ban[gyou - i][retsu - i] == after_c:
+                if board[gyou - i][retsu - i] == after_c:
                     break
                 else:
                     hidariue = 0
                     break
             elif gyou - i == 0:
-                if ban[gyou - i][retsu - i] == after_c:
+                if board[gyou - i][retsu - i] == after_c:
                     break
                 else:
                     hidariue = 0
                     break
             else:
-                if ban[gyou - i][retsu - i] == before_c:
+                if board[gyou - i][retsu - i] == before_c:
                     hidariue += 1
-                elif ban[gyou - i][retsu - i] == after_c:
+                elif board[gyou - i][retsu - i] == after_c:
                     break
                 else:
                     hidariue = 0

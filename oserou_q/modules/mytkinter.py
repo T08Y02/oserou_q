@@ -13,7 +13,7 @@ class Tkgui:
         self.rowinput = 0
         self.collumninput = 0
 
-    def ban_image(self,ban):
+    def board_image(self,board):
         self.canvas.delete("all")
         self.canvas.create_rectangle(50, 50, (const.SIZE+1) * 50, (const.SIZE+1) * 50, fill = 'green')
         for i in range(const.SIZE):
@@ -22,9 +22,9 @@ class Tkgui:
             self.canvas.create_line(50,50+50*i, (const.SIZE+1) * 50, 50+50*i, fill='black', width = '1')
         for i in range(const.SIZE):
             for j in range(const.SIZE):
-                if ban[i][j] == 1:
+                if board[i][j] == 1:
                     self.canvas.create_oval(50 + 50*j, 50 + 50*i, 100 + 50*j, 100 + 50*i, fill = 'black')
-                elif ban[i][j] == 2:
+                elif board[i][j] == 2:
                     self.canvas.create_oval(50 + 50*j, 50 + 50*i, 100 + 50*j, 100 + 50*i, fill = 'white')
                 else:
                     continue

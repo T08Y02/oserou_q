@@ -1,19 +1,19 @@
 from modules import constant as const
 
-def ban_place(ban, gyou, retsu, color):
-    ban[gyou][retsu] = color
-    return ban
+def board_place(board, gyou, retsu, color):
+    board[gyou][retsu] = color
+    return board
 
-def ban_reverse(ban, gyou, retsu):
-    if ban[gyou][retsu] == const.BLACK:
-        ban[gyou][retsu] = const.WHITE
-    elif ban[gyou][retsu] == const.WHITE:
-        ban[gyou][retsu] = const.BLACK
+def board_reverse(board, gyou, retsu):
+    if board[gyou][retsu] == const.BLACK:
+        board[gyou][retsu] = const.WHITE
+    elif board[gyou][retsu] == const.WHITE:
+        board[gyou][retsu] = const.BLACK
     else:
         print("error")
-    return ban
+    return board
 
-def ban_reverse_onestone(ban, gyou, retsu, color):
+def board_reverse_onestone(board, gyou, retsu, color):
     if color == const.WHITE:
         before_c = const.BLACK
         after_c = const.WHITE
@@ -37,22 +37,22 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if gyou - i == 0:
-                if ban[gyou-i][retsu] == after_c:
+                if board[gyou-i][retsu] == after_c:
                     break
                 else:
                     ue = 0
                     break
             else:
-                if ban[gyou-i][retsu] == before_c:
+                if board[gyou-i][retsu] == before_c:
                     ue += 1
-                elif ban[gyou-i][retsu] == after_c:
+                elif board[gyou-i][retsu] == after_c:
                 #print(gyou-i)
                     break
                 else:
                     ue = 0
                     break
     for i in range(ue):
-        ban = ban_reverse(ban, gyou - i - 1, retsu)
+        board = board_reverse(board, gyou - i - 1, retsu)
 
     for i in range(const.SIZE - retsu):
         if i==0:
@@ -62,21 +62,21 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if retsu + i == (const.SIZE - 1):
-                if ban[gyou][retsu + i] == after_c:
+                if board[gyou][retsu + i] == after_c:
                     break
                 else:
                     migi = 0
                     break
             else:
-                if ban[gyou][retsu + i] == before_c:
+                if board[gyou][retsu + i] == before_c:
                     migi += 1
-                elif ban[gyou][retsu + i] == after_c:
+                elif board[gyou][retsu + i] == after_c:
                     break
                 else:
                     migi = 0
                     break
     for i in range(migi):
-        ban = ban_reverse(ban, gyou, retsu + i + 1)
+        board = board_reverse(board, gyou, retsu + i + 1)
 
     for i in range(const.SIZE - gyou):
         if i==0:
@@ -86,21 +86,21 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if gyou + i == (const.SIZE - 1):
-                if ban[gyou+i][retsu] == after_c:
+                if board[gyou+i][retsu] == after_c:
                     break
                 else:
                     sita = 0
                     break
             else:
-                if ban[gyou+i][retsu] == before_c:
+                if board[gyou+i][retsu] == before_c:
                     sita += 1
-                elif ban[gyou + i][retsu] == after_c:
+                elif board[gyou + i][retsu] == after_c:
                     break
                 else:
                     sita = 0
                     break
     for i in range(sita):
-        ban = ban_reverse(ban, gyou + i + 1, retsu)
+        board = board_reverse(board, gyou + i + 1, retsu)
 
 
     for i in range(retsu+1):
@@ -111,15 +111,15 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if retsu - i == 0:
-                if ban[gyou][retsu - i] == after_c:
+                if board[gyou][retsu - i] == after_c:
                     break
                 else:
                     hidari = 0
                     break
             else:
-                if ban[gyou][retsu-i] == before_c:
+                if board[gyou][retsu-i] == before_c:
                     hidari += 1
-                elif ban[gyou][retsu-i] == after_c:
+                elif board[gyou][retsu-i] == after_c:
                     #print(gyou-i)
                     break
                 else:
@@ -127,7 +127,7 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                     break
 
     for i in range(hidari):
-        ban = ban_reverse(ban, gyou, retsu - i - 1)
+        board = board_reverse(board, gyou, retsu - i - 1)
 
     for i in range(gyou+1):
         if i==0:
@@ -137,27 +137,27 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if retsu + i == (const.SIZE - 1):
-                if ban[gyou - i][retsu + i] == after_c:
+                if board[gyou - i][retsu + i] == after_c:
                     break
                 else:
                     migiue = 0
                     break
             elif gyou - i == 0:
-                if ban[gyou - i][retsu + i] == after_c:
+                if board[gyou - i][retsu + i] == after_c:
                     break
                 else:
                     migiue = 0
                     break
             else:
-                if ban[gyou - i][retsu + i] == before_c:
+                if board[gyou - i][retsu + i] == before_c:
                     migiue += 1
-                elif ban[gyou - i][retsu + i] == after_c:
+                elif board[gyou - i][retsu + i] == after_c:
                     break
                 else:
                     migiue = 0
                     break
     for i in range(migiue):
-        ban = ban_reverse(ban, gyou - i - 1, retsu + i + 1)
+        board = board_reverse(board, gyou - i - 1, retsu + i + 1)
 
 
     for i in range(const.SIZE- gyou):
@@ -168,27 +168,27 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if retsu + i == (const.SIZE - 1):
-                if ban[gyou + i][retsu + i] == after_c:
+                if board[gyou + i][retsu + i] == after_c:
                     break
                 else:
                     migisita = 0
                     break
             elif gyou + i == (const.SIZE - 1):
-                if ban[gyou + i][retsu + i] == after_c:
+                if board[gyou + i][retsu + i] == after_c:
                     break
                 else:
                     migisita = 0
                     break
             else:
-                if ban[gyou + i][retsu + i] == before_c:
+                if board[gyou + i][retsu + i] == before_c:
                     migisita += 1
-                elif ban[gyou + i][retsu + i] == after_c:
+                elif board[gyou + i][retsu + i] == after_c:
                     break
                 else:
                     migisita = 0
                     break
     for i in range(migisita):
-        ban = ban_reverse(ban, gyou + i + 1, retsu + i + 1)
+        board = board_reverse(board, gyou + i + 1, retsu + i + 1)
 
 
     for i in range(const.SIZE- gyou):
@@ -199,27 +199,27 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if retsu - i == 0:
-                if ban[gyou + i][retsu - i] == after_c:
+                if board[gyou + i][retsu - i] == after_c:
                     break
                 else:
                     hidarisita = 0
                     break
             elif gyou + i == (const.SIZE - 1):
-                if ban[gyou + i][retsu - i] == after_c:
+                if board[gyou + i][retsu - i] == after_c:
                     break
                 else:
                     hidarisita = 0
                     break
             else:
-                if ban[gyou + i][retsu - i] == before_c:
+                if board[gyou + i][retsu - i] == before_c:
                     hidarisita += 1
-                elif ban[gyou + i][retsu - i] == after_c:
+                elif board[gyou + i][retsu - i] == after_c:
                     break
                 else:
                     hidarisita = 0
                     break
     for i in range(hidarisita):
-        ban = ban_reverse(ban, gyou + i + 1, retsu - i - 1)
+        board = board_reverse(board, gyou + i + 1, retsu - i - 1)
 
 
     for i in range(gyou+1):
@@ -230,30 +230,30 @@ def ban_reverse_onestone(ban, gyou, retsu, color):
                 continue
         else:
             if retsu - i == 0:
-                if ban[gyou - i][retsu - i] == after_c:
+                if board[gyou - i][retsu - i] == after_c:
                     break
                 else:
                     hidariue = 0
                     break
             elif gyou - i == 0:
-                if ban[gyou - i][retsu - i] == after_c:
+                if board[gyou - i][retsu - i] == after_c:
                     break
                 else:
                     hidariue = 0
                     break
             else:
-                if ban[gyou - i][retsu - i] == before_c:
+                if board[gyou - i][retsu - i] == before_c:
                     hidariue += 1
-                elif ban[gyou - i][retsu - i] == after_c:
+                elif board[gyou - i][retsu - i] == after_c:
                     break
                 else:
                     hidariue = 0
                     break
     for i in range(hidariue):
-        ban = ban_reverse(ban, gyou - i - 1, retsu - i - 1)
-    return ban
+        board = board_reverse(board, gyou - i - 1, retsu - i - 1)
+    return board
 
-def board_placestone(ban, gyou, retsu, color):
-    ban = ban_place(ban, gyou, retsu, color)
-    ban = ban_reverse_onestone(ban, gyou, retsu, color)
-    return ban
+def board_placestone(board, gyou, retsu, color):
+    board = board_place(board, gyou, retsu, color)
+    board = board_reverse_onestone(board, gyou, retsu, color)
+    return board
