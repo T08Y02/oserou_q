@@ -12,10 +12,10 @@ def osero_initialize(ban):
     #0 = blank
     #1 = black
     #2 = white
-    ban[3][3] = 2
-    ban[4][4] = 2
-    ban[3][4] = 1
-    ban[4][3] = 1
+    ban[const.SIZE //2 - 1][const.SIZE // 2 - 1] = 2
+    ban[const.SIZE //2    ][const.SIZE // 2    ] = 2
+    ban[const.SIZE //2 - 1][const.SIZE // 2    ] = 1
+    ban[const.SIZE //2    ][const.SIZE // 2 - 1] = 1
     return ban
 
 def score_2dvec(ban):
@@ -51,8 +51,8 @@ def cpu_placestone(ban):
     #score = score_learning(ban, const.WHITE)
     score = score_2dvec(ban)
 
-    for gyou in range(8):
-        for retsu in range(8):
+    for gyou in range(const.SIZE):
+        for retsu in range(const.SIZE):
             if bestscore < score[gyou][retsu]:
                 bestscore = score[gyou][retsu]
                 bestscorex = gyou
@@ -61,7 +61,6 @@ def cpu_placestone(ban):
 
         #print("cpu:"," ", bestscorex, ",", bestscorey)
         ban = placestone.board_placestone(ban, bestscorex, bestscorey, 2)
-        owaru1 = False
         owaru2 = False
     else:
         print("cpupass")
@@ -75,7 +74,8 @@ def player_placestone(ban, gyou, retsu):
     global owaru1
     global owaru2
     print(gyou, ",", retsu)
-    if calcscore.score_count(ban, gyou, retsu, 1) < 1 or ban[gyou][retsu] > 0:
+    if calcscore.score_count(ban, gyou, retsu, 1) < 1 or ban[gyou][retsu] > 0 or gyou >= const.SIZE or retsu >= const.SIZE\
+        or gyou < 0 or retsu < 0:
         #if ban[gyou][retsu]>0:
             #print("Yes")
         print("playerpass")
@@ -85,7 +85,6 @@ def player_placestone(ban, gyou, retsu):
     else:
         ban = placestone.board_placestone(ban, gyou, retsu, 1)
         owaru1 = False
-        owaru2 = False
     return ban
 
 def main():
@@ -93,11 +92,9 @@ def main():
     global turns
     turns = 0
     teban = 0
-    gyoudayo = 0
-    retudayo = 0
     owaru1 = False
     owaru2 = False
-    ban = [ [0] * 8 for i in range(8)]
+    ban = [ [0] * const.SIZE for i in range(const.SIZE)]
     ban = osero_initialize(ban)
     tkgui.ban_image(ban)
     a = input("time control:")
@@ -111,7 +108,7 @@ def main():
                 while error:
                     try:
                         tkgui.wait_click(a)
-                        ban = player_placestone(ban, gyoudayo, retudayo)
+                        ban = player_placestone(ban, tkgui.rowinput, tkgui.collumninput)
                         error = False
                         teban += 1
                         turns += 1
