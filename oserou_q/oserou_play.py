@@ -59,7 +59,7 @@ def cpu_placestone(board):
                 bestscorey = collumn
     if bestscorex >= 0:
 
-        #print("cpu:"," ", bestscorex, ",", bestscorey)
+        print("cpu:"," ", bestscorex, ",", bestscorey)
         board = placestone.board_placestone(board, bestscorex, bestscorey, 2)
         owaru2 = False
     else:
