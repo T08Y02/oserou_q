@@ -120,9 +120,12 @@ def player_placestone(board, row, collumn):
             owaru1 = False
     return board
 
+def one_episode():
+
+
 def main():
     tkgui = mytkinter.Tkgui()
-    global turns
+    global turns, owaru1, owaru2
     turns = 0
     teban = 0
     owaru1 = False
@@ -134,6 +137,7 @@ def main():
 
     while turns < const.SIZE**2 - 4:
         error = True
+        print(owaru1, owaru2)
         if owaru1 == False or owaru2 == False:
 
             #time.sleep(3)
