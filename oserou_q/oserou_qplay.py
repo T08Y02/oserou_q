@@ -189,12 +189,12 @@ def one_episode(tkgui):
     teban = 0
     owaru1 = False
     owaru2 = False
-    waittime = 0.00000001
-    #waittime = 1
+    #waittime = 0.000001
+    waittime = 1
     board = [ [0] * const.SIZE for i in range(const.SIZE)]
     board = osero_initialize(board)
     tkgui.board_image(board)
-    #a = input("time control:")
+    a = input("time control:")
     # for learning
     q1 = qagent.Qagent(const.DEFAULT_ALPHA, const.DEFAULT_GAMMA, const.BLACK)
     q2 = qagent.Qagent(const.DEFAULT_ALPHA, const.DEFAULT_GAMMA, const.WHITE)
@@ -211,40 +211,36 @@ def one_episode(tkgui):
     last_board_1 = osero_initialize(last_board_2)
 
     while turns < const.SIZE**2 - 4:
-        #error = True
+        error = True
         #print(owaru1, owaru2)
         if owaru1 == False or owaru2 == False:
 
             #time.sleep(3)
             if teban // 2 * 2 == teban:
-                # while error:
-                #     try:
-                #         tkgui.wait_click(a)
-                #         board = player_placestone(board, tkgui.rowinput, tkgui.collumninput)
-                #         board = cpu_placestone_black(board)
-                #         error = False
-                #         teban += 1
-                #         turns += 1
-                #         tkgui.board_image(board)
+                while error:
+                    try:
+                        tkgui.wait_click(a)
+                        board = player_placestone(board, tkgui.rowinput, tkgui.collumninput)
+                        #board = cpu_placestone_black(board)
+                        error = False
+                        teban += 1
+                        turns += 1
+                        tkgui.board_image(board)
 
-                #     except ValueError:
-                #         print("error1 0~7 int please")
-                #         tkgui.board_image(board)
-                ##time.sleep(waittime)
-                board = cpu_placestone_qlearn(q1, board, const.BLACK)
-                #error = False
-                teban += 1
-                turns += 1
-                ##tkgui.board_image(board)
+                    except ValueError:
+                        print("error1 0~7 int please")
+                        tkgui.board_image(board)
+                #time.sleep(waittime)
+                #board = cpu_placestone_qlearn(q1, board, const.BLACK)
 
             else:
-                ##time.sleep(waittime)
+                time.sleep(waittime)
                 board = cpu_placestone_qlearn(q2, board, const.WHITE)
                 teban += 1
                 turns += 1
-                ##tkgui.board_image(board)
+                tkgui.board_image(board)
                 #board[row][collumn]
-                ##time.sleep(waittime)
+                time.sleep(waittime)
         else:
             break
     winner = calcresult.winner(board)
@@ -255,13 +251,13 @@ def one_episode(tkgui):
     elif winner[0] == "second player":
         q2.add_fee(q2.board2state(last_board_2), last_act_2, const.WINNER_SCORE)
     
-    q1.save()
-    q2.save()
+    #q1.save()
+    #q2.save()
     tkgui.canvas.delete("all")
 
 def main():
     tkgui = mytkinter.Tkgui()
-    itr = 2000
+    itr = 1
     for i in range(itr):
         one_episode(tkgui)
     
