@@ -218,11 +218,11 @@ def one_episode(tkgui):
         if owaru1 == False or owaru2 == False:
 
             #time.sleep(3)
-            if teban // 2 * 2 == teban:
+            if teban // 2 * 2 + 1 == teban:
                 while error:
                     try:
                         tkgui.wait_click(a)
-                        board = player_placestone(board, tkgui.rowinput, tkgui.collumninput, const.BLACK)
+                        board = player_placestone(board, tkgui.rowinput, tkgui.collumninput, const.WHITE)
                         
                         #board = cpu_placestone_black(board)
                         error = False
@@ -238,7 +238,7 @@ def one_episode(tkgui):
 
             else:
                 time.sleep(waittime)
-                board = cpu_placestone_qlearn(q2, board, const.WHITE)
+                board = cpu_placestone_qlearn(q1, board, const.BLACK)
                 teban += 1
                 turns += 1
                 tkgui.board_image(board)

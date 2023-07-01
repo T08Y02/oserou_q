@@ -59,10 +59,10 @@ class Qagent:
 
     def learning(self, state, act, max_q):
         #Q 値更新
+        #print("happy")
         pQ = self.select_q(state, act)
-        if max_q < pQ:
-            print(state)
         new_q = pQ + self._alpha * (self._gamma * (max_q - pQ))
+        #print(new_q - pQ)
         self.set(state, act, new_q)
 
     def add_fee(self, state, act, fee):

@@ -92,7 +92,7 @@ def score_qlearn(q, board, color):
         for collumn in range(const.SIZE):
             if calcscore.score_count(board, row, collumn, color) > 0:
                 state = q.board2state(board)
-                score[row][collumn] += q.select_q(state, [row, collumn])
+                score[row][collumn] += max(1, q.select_q(state, [row, collumn]))
             else:
                 score[row][collumn] -= 2000000
 
@@ -103,7 +103,7 @@ def score_qlearn(q, board, color):
     #print(score)
     return score
     
-def cpu_placestone_qlearn(q, board, color):
+def cpu_placestone_qlearn(q, board, color, eps):
     global turns, owaru1, owaru2
     global last_act_1, last_act_2, last_board_1, last_board_2
 
@@ -115,14 +115,26 @@ def cpu_placestone_qlearn(q, board, color):
     #score = score_2dvec(board, color)
     score = score_qlearn(q, board, color)
     #print(score)
+    safexy = []
 
     for row in range(const.SIZE):
         for collumn in range(const.SIZE):
+            if score[row][collumn] > 0:
+                 safexy.append([row, collumn])
             if bestscore < score[row][collumn]:
                 bestscore = score[row][collumn]
                 bestscorex = row
                 bestscorey = collumn
+    #print(bestscore)  
     if bestscorex >= 0:
+
+        #epsの確率でランダムに探索
+        if random.random() < eps:
+            randindex = random.randint(0, len(safexy)-1)
+            bestscorex = safexy[randindex][0]
+            bestscorey = safexy[randindex][1]
+            bestscore = score[ bestscorex][bestscorey]
+                
         #print("cpu:"," ", bestscorex, ",", bestscorey)
         cur_state = q.board2state(board)
         last_board = copy.deepcopy(board)
@@ -138,7 +150,6 @@ def cpu_placestone_qlearn(q, board, color):
             last_act_1 = [bestscorex, bestscorey]
             last_board_1 = last_board
             #print(last_board_1)
-            
 
         elif color == 2:
             owaru2 = False
@@ -146,7 +157,7 @@ def cpu_placestone_qlearn(q, board, color):
             if turns != 1:
                 last_state = q.board2state(last_board_2)
                 cur_best_score = q.select_q(cur_state, [bestscorex, bestscorey])     
-                q.learning(last_state, last_act_1, cur_best_score)
+                q.learning(last_state, last_act_2, cur_best_score)
             last_act_2 = [bestscorex, bestscorey]
             last_board_2 = last_board
 
@@ -189,8 +200,8 @@ def one_episode(tkgui):
     teban = 0
     owaru1 = False
     owaru2 = False
-    waittime = 0.00000001
-    #waittime = 1
+    #waittime = 0.00000001
+    waittime = 0.5
     board = [ [0] * const.SIZE for i in range(const.SIZE)]
     board = osero_initialize(board)
     tkgui.board_image(board)
@@ -208,14 +219,14 @@ def one_episode(tkgui):
     last_board_1 = [[0 for i in range(const.SIZE)] for j in range(const.SIZE) ]
     last_board_1 = osero_initialize(last_board_1)
     last_board_2 = [[0 for i in range(const.SIZE)] for j in range(const.SIZE) ]
-    last_board_1 = osero_initialize(last_board_2)
+    last_board_2 = osero_initialize(last_board_2)
 
     while turns < const.SIZE**2 - 4:
         #error = True
         #print(owaru1, owaru2)
         if owaru1 == False or owaru2 == False:
 
-            #time.sleep(3)
+            #time.sleep(waittime)
             if teban // 2 * 2 == teban:
                 # while error:
                 #     try:
@@ -230,30 +241,34 @@ def one_episode(tkgui):
                 #     except ValueError:
                 #         print("error1 0~7 int please")
                 #         tkgui.board_image(board)
-                ##time.sleep(waittime)
-                board = cpu_placestone_qlearn(q1, board, const.BLACK)
+                #time.sleep(waittime)
+                board = cpu_placestone_qlearn(q1, board, const.BLACK, eps)
+                #board = cpu_placestone(board, const.BLACK)
                 #error = False
                 teban += 1
                 turns += 1
-                ##tkgui.board_image(board)
+                #tkgui.board_image(board)
 
             else:
-                ##time.sleep(waittime)
-                board = cpu_placestone_qlearn(q2, board, const.WHITE)
+                #time.sleep(waittime)
+                board = cpu_placestone_qlearn(q2, board, const.WHITE, eps)
                 teban += 1
                 turns += 1
-                ##tkgui.board_image(board)
+                #tkgui.board_image(board)
                 #board[row][collumn]
                 ##time.sleep(waittime)
         else:
             break
     winner = calcresult.winner(board)
-    print(winner)
+    #print(winner)
     if winner[0] == "first player":
         q1.add_fee(q1.board2state(last_board_1), last_act_1, const.WINNER_SCORE)
+        q2.add_fee(q2.board2state(last_board_2), last_act_2, const.LOSER_SCORE)
 
     elif winner[0] == "second player":
         q2.add_fee(q2.board2state(last_board_2), last_act_2, const.WINNER_SCORE)
+        q1.add_fee(q1.board2state(last_board_1), last_act_1, const.LOSER_SCORE)
+
     
     q1.save()
     q2.save()
@@ -261,7 +276,7 @@ def one_episode(tkgui):
 
 def main():
     tkgui = mytkinter.Tkgui()
-    itr = 2000
+    itr = 1000
     for i in range(itr):
         one_episode(tkgui)
     
