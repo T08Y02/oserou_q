@@ -276,7 +276,7 @@ def one_episode(tkgui):
 
 def main():
     tkgui = mytkinter.Tkgui()
-    itr = 1000
+    itr = 2000
     for i in range(itr):
         one_episode(tkgui)
     
