@@ -37,7 +37,7 @@ def score_2dvec(board):
     global turns
     for row in range(const.SIZE):
         for collumn in range(const.SIZE):
-            score[row][collumn] += abs(int(random.gauss(0, 10))) // int(pow((turns+1), 0.5))
+            score[row][collumn] += abs(int(random.gauss(0, 1))) // int(pow((turns+1), 0.5))
 
     return score
 
@@ -59,7 +59,7 @@ def cpu_placestone(board):
                 bestscorey = collumn
     if bestscorex >= 0:
 
-        #print("cpu:"," ", bestscorex, ",", bestscorey)
+        print("cpu:"," ", bestscorex, ",", bestscorey)
         board = placestone.board_placestone(board, bestscorex, bestscorey, 2)
         owaru2 = False
     else:
@@ -83,7 +83,7 @@ def player_placestone(board, row, collumn):
         if calcscore.score_count(board, row, collumn, 1) < 1 or board[row][collumn] > 0:
             #if board[row][collumn]>0:
                 #print("Yes")
-            print("playerpass(invalid input:got no stones)")
+            print("playerpass(invalid input:got no stones or already occupied)")
             turns -= 1
             owaru1 = True
         else:
@@ -93,7 +93,7 @@ def player_placestone(board, row, collumn):
 
 def main():
     tkgui = mytkinter.Tkgui()
-    global turns
+    global turns, owaru1, owaru2
     turns = 0
     teban = 0
     owaru1 = False
@@ -117,6 +117,7 @@ def main():
                         teban += 1
                         turns += 1
                         tkgui.board_image(board)
+                        print(owaru1, owaru2)
 
                     except ValueError:
                         print("error1 0~7 int please")
