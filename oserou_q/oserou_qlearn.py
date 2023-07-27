@@ -201,7 +201,7 @@ def one_episode(tkgui):
     owaru1 = False
     owaru2 = False
     #waittime = 0.00000001
-    waittime = 0.5
+    waittime = 0.1
     board = [ [0] * const.SIZE for i in range(const.SIZE)]
     board = osero_initialize(board)
     tkgui.board_image(board)
@@ -226,7 +226,7 @@ def one_episode(tkgui):
         #print(owaru1, owaru2)
         if owaru1 == False or owaru2 == False:
 
-            #time.sleep(waittime)
+            time.sleep(waittime)
             if teban // 2 * 2 == teban:
                 # while error:
                 #     try:
@@ -247,14 +247,14 @@ def one_episode(tkgui):
                 #error = False
                 teban += 1
                 turns += 1
-                #tkgui.board_image(board)
+                tkgui.board_image(board)
 
             else:
                 #time.sleep(waittime)
                 board = cpu_placestone_qlearn(q2, board, const.WHITE, eps)
                 teban += 1
                 turns += 1
-                #tkgui.board_image(board)
+                tkgui.board_image(board)
                 #board[row][collumn]
                 ##time.sleep(waittime)
         else:
@@ -276,7 +276,7 @@ def one_episode(tkgui):
 
 def main():
     tkgui = mytkinter.Tkgui()
-    itr = 2000
+    itr = 10
     for i in range(itr):
         one_episode(tkgui)
     

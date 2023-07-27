@@ -1,1 +1,4 @@
 .env
+.python-version
+oserou_q/modules/qlearn/model/q_table_1_5ver.csv
+oserou_q/modules/qlearn/model/q_table_2_5ver.csv

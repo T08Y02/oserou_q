@@ -61,7 +61,7 @@ class Qagent:
         #Q 値更新
         #print("happy")
         pQ = self.select_q(state, act)
-        new_q = pQ + self._alpha * (self._gamma * (max_q - pQ))
+        new_q = pQ + self._alpha * (self._gamma * max_q - pQ)
         #print(new_q - pQ)
         self.set(state, act, new_q)
 
